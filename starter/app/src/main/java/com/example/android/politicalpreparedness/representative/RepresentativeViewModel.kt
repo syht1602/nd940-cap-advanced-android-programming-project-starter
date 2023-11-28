@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness.representative
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.network.CivicsApi
@@ -10,15 +11,31 @@ import com.example.android.politicalpreparedness.representative.model.Representa
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RepresentativeViewModel : ViewModel() {
+class RepresentativeViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
     //TODO: Establish live data for representatives and address
 
-    private val _representatives = MutableLiveData<List<Representative>>()
+    private val MOTION_LAYOUT_STATE_KEY = "motion_layout_state"
+    private val ADDRESS_KEY = "address"
+    private val REPRESENTATIVE_LIST_KEY = "representative_list"
+
+    fun saveMotionLayoutState(state: Int) {
+        savedStateHandle[MOTION_LAYOUT_STATE_KEY] = state
+    }
+
+    private val _representatives: MutableLiveData<List<Representative>> =
+        savedStateHandle.getLiveData(REPRESENTATIVE_LIST_KEY)
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    private val _address = MutableLiveData<Address>()
+
+    private val _motionLayoutState: MutableLiveData<Int> =
+        savedStateHandle.getLiveData(MOTION_LAYOUT_STATE_KEY)
+    val motionLayoutState: LiveData<Int>
+        get() = _motionLayoutState
+
+    private val _address: MutableLiveData<Address> =
+        savedStateHandle.getLiveData(ADDRESS_KEY)
     val address: LiveData<Address>
         get() = _address
 
@@ -29,20 +46,26 @@ class RepresentativeViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             address.value?.toFormattedString()
                 ?.let { address ->
-                    println("Address formatted = $address")
-                    val representativeList =
-                        CivicsApi.retrofitService.getRepresentatives(address = address)
-                    val official = mutableListOf<Representative>()
-                    representativeList.offices.forEach {
-                        official.addAll(it.getRepresentatives(representativeList.officials))
+                    try {
+                        println("Address formatted = $address")
+                        val representativeList =
+                            CivicsApi.retrofitService.getRepresentatives(address = address)
+                        val official = mutableListOf<Representative>()
+                        representativeList.offices.forEach {
+                            official.addAll(it.getRepresentatives(representativeList.officials))
+                        }
+                        _representatives.postValue(official)
+                        savedStateHandle[REPRESENTATIVE_LIST_KEY] = official
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                    _representatives.postValue(official)
                 }
         }
     }
 
     fun setAddress(address: Address) {
         this._address.value = address
+        savedStateHandle[ADDRESS_KEY] = address
     }
 
     /**

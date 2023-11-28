@@ -22,7 +22,7 @@ class MainApplication : Application() {
                 VoterInfoViewModel(get())
             }
             viewModel {
-                RepresentativeViewModel()
+                RepresentativeViewModel(get())
             }
 //            single { ElectionRepositoryImpl(get(), get()) }
 //            single { RepresentativeRepositoryImpl(get()) }

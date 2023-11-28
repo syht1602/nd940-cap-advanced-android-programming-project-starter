@@ -88,6 +88,9 @@ class RepresentativeFragment : Fragment() {
                 enableLocationPermissions()
             }
         }
+        viewModel.motionLayoutState.observe(viewLifecycleOwner) {
+            binding.motionRepresentative.transitionToState(it)
+        }
         return binding.root
     }
 
@@ -199,4 +202,8 @@ class RepresentativeFragment : Fragment() {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveMotionLayoutState(binding.motionRepresentative.currentState)
+    }
 }

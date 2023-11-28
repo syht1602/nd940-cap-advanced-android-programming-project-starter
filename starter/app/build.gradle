@@ -79,6 +79,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$version_room"
     kapt "androidx.room:room-compiler:$version_room"
     implementation "com.squareup.okhttp3:logging-interceptor:$version_logging_interceptor"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:1.0.0-alpha01"
 
 
     // Location
