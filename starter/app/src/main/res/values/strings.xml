@@ -3,5 +3,24 @@
     <string name="app_name">Political Preparedness</string>
 
     <!-- TODO: Add necessary string values -->
+    <string name="find_my_representatives">Find My Representatives</string>
+    <string name="upcoming_elections">Upcoming Elections</string>
+    <string name="representatives_search">Representatives Search</string>
+    <string name="my_representatives">My Representatives</string>
+    <string name="use_my_locations">Use my location</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="address_line_1">Address line 1</string>
+    <string name="address_line_2">Address line 2</string>
+    <string name="settings">Settings</string>
+
+
+    <string name="location_required_title">Need enable Location services</string>
+    <string name="location_required_message">Please enable location services to use this feature.</string>
+    <string name="saved_elections">Saved Elections</string>
+    <string name="voting_location">Voter Location</string>
+    <string name="ballot_information">Ballot Information</string>
+    <string name="follow_election">Follow Election</string>
+    <string name="un_follow_election">Unfollow Election</string>
 
 </resources>

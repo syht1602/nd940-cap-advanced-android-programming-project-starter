@@ -5,8 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
+import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VoterInfoFragment : Fragment() {
+    private val viewModel: VoterInfoViewModel by viewModel()
+    private lateinit var binding: FragmentVoterInfoBinding
+    private val args: VoterInfoFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +34,13 @@ class VoterInfoFragment : Fragment() {
 
         // TODO: Handle save button UI state
         // TODO: cont'd Handle save button clicks
-        return null
+//        return null
+        binding = FragmentVoterInfoBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        viewModel.getElectionById(args.argElectionId)
+        viewModel.getFollowingStatus(args.argElectionId)
+        return binding.root
     }
 
     // TODO: Create method to load URL intents
